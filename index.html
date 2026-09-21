@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vault UBG - Game Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-deep: #101214;        /* Darkest ash background */
+      --bg-main: #16181c;        /* Primary page background */
+      --bg-card: #1f2329;        /* Card background */
+      --bg-card-hover: #2e343d;  /* Card hover state */
+      --border-color: #2e343d;   /* Subtle divider border */
+      --accent-gray: #3a414d;    /* Active states and accents */
+      --text-white: #ffffff;     /* All primary text pure white */
+      --text-muted: #a0a6b1;     /* Subtitle text light ash */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--text-white);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background-color: var(--bg-main);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-white);
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background-color: var(--text-white);
+      color: var(--bg-deep);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+
+    .search-box {
+      flex: 1;
+      max-width: 450px;
+      position: relative;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.65rem 1rem 0.65rem 2.5rem;
+      background-color: var(--bg-deep);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-white);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--text-white);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    .main-wrapper {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    .category-section {
+      margin-bottom: 2rem;
+    }
+
+    .category-bar {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-color) transparent;
+    }
+
+    .category-btn {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-white);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .category-btn:hover {
+      background-color: var(--bg-card-hover);
+    }
+
+    .category-btn.active {
+      background-color: var(--text-white);
+      color: var(--bg-deep);
+      border-color: var(--text-white);
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .game-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--text-white);
+      background-color: var(--bg-card-hover);
+    }
+
+    .thumbnail-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background-color: var(--bg-deep);
+      overflow: hidden;
+    }
+
+    .thumbnail-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .game-card:hover .thumbnail-img {
+      transform: scale(1.05);
+    }
+
+    .card-content {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.25rem;
+    }
+
+    .game-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.2;
+    }
+
+    .fav-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0.2rem;
+      transition: var(--transition);
+    }
+
+    .fav-btn:hover, .fav-btn.active {
+      color: #ff4757;
+    }
+
+    .game-category-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.85);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-container {
+      width: 90%;
+      max-width: 1000px;
+      height: 85vh;
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .modal-header {
+      padding: 1rem 1.25rem;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-white);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      background-color: var(--bg-deep);
+      border: 1px solid var(--border-color);
+      color: var(--text-white);
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: var(--transition);
+    }
+
+    .action-btn:hover {
+      background-color: var(--text-white);
+      color: var(--bg-deep);
+    }
+
+    .iframe-wrapper {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      position: relative;
+    }
+
+    .iframe-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .footer {
+      background-color: var(--bg-main);
+      border-top: 1px solid var(--border-color);
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--text-white);
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-container">
+      <a href="#" class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-vault"></i></div>
+        <span class="brand-title">Vault UBG</span>
+      </a>
+
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
+      </div>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+    <div class="category-section">
+      <div class="category-bar" id="categoryBar">
+        <button class="category-btn active" data-category="all"><i class="fa-solid fa-border-all"></i> All Games</button>
+        <button class="category-btn" data-category="favorites"><i class="fa-solid fa-heart"></i> Favorites</button>
+        <button class="category-btn" data-category="action"><i class="fa-solid fa-bolt"></i> Action</button>
+        <button class="category-btn" data-category="driving"><i class="fa-solid fa-car"></i> Driving</button>
+        <button class="category-btn" data-category="sports"><i class="fa-solid fa-basketball"></i> Sports</button>
+        <button class="category-btn" data-category="3d"><i class="fa-solid fa-cube"></i> 3D</button>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <i class="fa-solid fa-gamepad"></i> <span id="sectionHeading">All Games</span>
+    </div>
+
+    <div class="games-grid" id="gamesGrid">
+      <!-- Dynamic game cards -->
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="gameModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title" id="modalGameTitle">Playing Game</div>
+        <div class="modal-actions">
+          <button class="action-btn" id="fullscreenBtn"><i class="fa-solid fa-expand"></i> Fullscreen</button>
+          <button class="action-btn" id="closeModalBtn"><i class="fa-solid fa-xmark"></i> Close</button>
+        </div>
+      </div>
+      <div class="iframe-wrapper">
+        <iframe id="gameIframe" src="" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Vault UBG. The ultimate game hub. All games belong to their respectful owners. More games in the coming days!</p>
+  </footer>
+
+  <script>
+    // GAME DATA ARRAY
+    const GAMES = [
+      {
+        id: "slope",
+        title: "Slope",
+        category: "3d",
+        thumbnail: "Slope2.png",
+        fileUrl: "Slope 2.html"
+      },
+      {
+        id: "retro-bowl",
+        title: "Retro Bowl",
+        category: "sports",
+        thumbnail: "Retrobowl.png",
+        fileUrl: "Retro Bowl.html"
+      },
+      {
+        id: "drift-boss",
+        title: "Drift Boss",
+        category: "driving",
+        thumbnail: "Driftboss.png",
+        fileUrl: "Drift Boss.html"
+      },
+      {
+        id: "space-waves",
+        title: "Space Waves",
+        category: "action",
+        thumbnail: "Spacewaves.png",
+        fileUrl: "Space Waves.html"
+      },
+      {
+        id: "ragdoll-hit",
+        title: "Ragdoll Hit",
+        category: "action",
+        thumbnail: "Ragdollhit.png",
+        fileUrl: "Ragdoll Hit.html"
+      },
+      {
+        id: "monster-tracks",          // Unique ID
+        title: "Monster Tracks",    // Card title
+        category: "driving",     // Category tag
+        thumbnail: "Monstertracks.png", // Image file
+        fileUrl: "https://breakium.netlify.app/games/monster-tracks/"    // Game HTML file
+      }, // <-- Add a comma IF there is another game after it!
+      {
+        id: "baseball-bros",          // Unique ID
+        title: "Baseball Bros",    // Card title
+        category: "sports",     // Category tag
+        thumbnail: "Baseballbros.png", // Image file
+        fileUrl: "https://harshulgoon.github.io/iframes/baseballbros.html"    // Game HTML file
+      }, // <-- Add a comma IF there is another game after it!
+      {
+        id: "minecraft",          // Unique ID
+        title: "Minecraft",    // Card title
+        category: "action",     // Category tag
+        thumbnail: "Minecraft.png", // Image file
+        fileUrl: "Minecraft 1.12.2.html"    // Game HTML file
+      }, // <-- Add a comma IF there is another game after it!
+      {
+        id: "granny",          // Unique ID
+        title: "Granny",    // Card title
+        category: "action",     // Category tag
+        thumbnail: "Granny.png", // Image file
+        fileUrl: "Granny.html"    // Game HTML file
+      }, // <-- Add a comma IF there is another game after it!
+      {
+        id: "baldisbasics",          // Unique ID
+        title: "Baldi's Basics",    // Card title
+        category: "action",     // Category tag
+        thumbnail: "Baldisbasics.png", // Image file
+        fileUrl: "Baldis Basics Classic.html"    // Game HTML file
+      }, // <-- Add a comma IF there is another game after it!
+      {
+        id: "drivemad",          // Unique ID
+        title: "Drive Mad",    // Card title
+        category: "driving",     // Category tag
+        thumbnail: "Drivemad.png", // Image file
+        fileUrl: "Drive Mad.html"    // Game HTML file
+      }, // <-- Add a comma IF there is another game after it!
+      {
+        id: "rocket-league-2d",          // Unique ID
+        title: "Rocket League 2D",    // Card title
+        category: "sports",     // Category tag
+        thumbnail: "Rocketleague2d.png", // Image file
+        fileUrl: "https://skempisty.github.io/rocket_league_2d/"    // Game HTML file
+      }, // <-- Add a comma IF there is another game after it!
+      {
+        id: "cookie-clicker",          // Unique ID
+        title: "Cookie Clicker",    // Card title
+        category: "sports",     // Category tag
+        thumbnail: "Cookieclicker.png", // Image file
+        fileUrl: "Cookie Clicker.html"    // Game HTML file
+      }, // <-- Add a comma IF there is another game after it!
+    ];
+
+    // Helper for generating dynamic fallback SVG images for missing local image files
+    const getPlaceholderImage = (title) => {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="170" viewBox="0 0 300 170"><rect width="100%" height="100%" fill="#1f2329"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="18" fill="#ffffff">${title}</text></svg>`;
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    };
+
+    let favorites = JSON.parse(localStorage.getItem('vault_ubg_favs')) || [];
+
+    const gamesGrid = document.getElementById('gamesGrid');
+    const searchInput = document.getElementById('searchInput');
+    const categoryBar = document.getElementById('categoryBar');
+    const sectionHeading = document.getElementById('sectionHeading');
+    
+    const gameModal = document.getElementById('gameModal');
+    const gameIframe = document.getElementById('gameIframe');
+    const modalGameTitle = document.getElementById('modalGameTitle');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function renderGames() {
+      gamesGrid.innerHTML = '';
+
+      const filtered = GAMES.filter(game => {
+        const matchesCategory = 
+          currentCategory === 'all' ? true :
+          currentCategory === 'favorites' ? favorites.includes(game.id) :
+          game.category === currentCategory;
+
+        const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        gamesGrid.innerHTML = `
+          <div class="no-results">
+            <i class="fa-solid fa-ghost" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+            <p>No games found!</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(game => {
+        const isFav = favorites.includes(game.id);
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        
+        card.innerHTML = `
+          <div class="thumbnail-wrapper">
+            <img class="thumbnail-img" 
+                 src="${game.thumbnail}" 
+                 alt="${game.title}"
+                 onerror="this.onerror=null; this.src='${getPlaceholderImage(game.title)}';">
+          </div>
+          <div class="card-content">
+            <div class="card-header">
+              <span class="game-title">${game.title}</span>
+              <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${game.id}">
+                <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
+              </button>
+            </div>
+            <div class="game-category-tag">${game.category}</div>
+          </div>
+        `;
+
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.fav-btn')) return;
+          openGame(game);
+        });
+
+        const favBtn = card.querySelector('.fav-btn');
+        favBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleFavorite(game.id);
+        });
+
+        gamesGrid.appendChild(card);
+      });
+    }
+
+    function toggleFavorite(id) {
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(favId => favId !== id);
+      } else {
+        favorites.push(id);
+      }
+      localStorage.setItem('vault_ubg_favs', JSON.stringify(favorites));
+      renderGames();
+    }
+
+    function openGame(game) {
+      modalGameTitle.textContent = game.title;
+      gameIframe.src = game.fileUrl;
+      gameModal.classList.add('active');
+    }
+
+    function closeGame() {
+      gameModal.classList.remove('active');
+      gameIframe.src = '';
+    }
+
+    closeModalBtn.addEventListener('click', closeGame);
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (gameIframe.requestFullscreen) {
+        gameIframe.requestFullscreen();
+      } else if (gameIframe.webkitRequestFullscreen) {
+        gameIframe.webkitRequestFullscreen();
+      }
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderGames();
+    });
+
+    categoryBar.addEventListener('click', (e) => {
+      const btn = e.target.closest('.category-btn');
+      if (!btn) return;
+
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      currentCategory = btn.dataset.category;
+      sectionHeading.textContent = btn.textContent.trim();
+      renderGames();
+    });
+
+    renderGames();
+  </script>
+</body>
+</html>

@@ -1,3 +1,1 @@
-Will add more files later.
-Have fun!
-Use the code however you want. Please do not copy my site.
+This is the full code for Vault-UBG. Use it wisely. I usually update the site at lease once a week. Have fun!
